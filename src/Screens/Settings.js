@@ -1,13 +1,17 @@
 import React from 'react';
 import {
-  Box,
+  Box, Flex,
 } from '@chakra-ui/react';
 
 function Settings() {
   return (
-    <Box textAlign="center" fontSize="xl">
+    <Flex bg="gray.200"
+          height="100vh"
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column">
       <h1>Settings where the heart is</h1>
-    </Box>
+    </Flex>
   );
 }
 
