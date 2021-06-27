@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Text,
@@ -11,14 +11,36 @@ import {
   Button,
   FormErrorMessage,
   FormHelperText,
+  InputGroup,
+  InputLeftAddon,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
 } from '@chakra-ui/react';
+import suite from '../validate';
 
 function Home() {
+  const [formState, setFormState] = useState({});
+
+  const result = suite.get();
+  const runValidate = (name, value) => {
+    suite(
+      {
+        ...formState,
+        ...{ [name]: value },
+      },
+      name
+    );
+  };
+
+  function handleChange(name, value) {
+    setFormState({ ...formState, [name]: value });
+    runValidate(name, value);
+  }
+  console.log(result);
+
   return (
     <Flex
       bg="gray.200"
@@ -29,9 +51,21 @@ function Home() {
     >
       <Box borderRadius="5" bg="white" p={5} width="500px">
         <VStack spacing={3}>
-          <FormControl id="address" isRequired>
+          <FormControl
+            name="address"
+            id="address"
+            isRequired
+            isInvalid={result.getErrors('address')}
+          >
             <FormLabel htmlFor="address">Address</FormLabel>
-            <Input placeholder="address" size="md" />
+            <Input
+              name="address"
+              placeholder="address"
+              size="md"
+              onChange={e => handleChange(e.target.name, e.target.value)}
+              value={formState.address}
+            />
+            <FormErrorMessage>Oi it's required</FormErrorMessage>
           </FormControl>
           <FormControl id="time" isRequired>
             <FormLabel htmlFor="time">Time</FormLabel>
@@ -54,11 +88,14 @@ function Home() {
           <Text fontSize="2xl">Recipient Details</Text>
           <FormControl id="job" isRequired>
             <FormLabel htmlFor="job">Name</FormLabel>
-            <Input placeholder="job" size="md" />
+            <Input placeholder="Name" size="md" />
           </FormControl>
           <FormControl id="job" isRequired>
             <FormLabel htmlFor="job">Contact Number</FormLabel>
-            <Input placeholder="job" size="md" />
+            <InputGroup>
+              <InputLeftAddon children="+65" />
+              <Input type="tel" placeholder="phone number" />
+            </InputGroup>
           </FormControl>
           <Button colorScheme="teal" size="md">
             Save
