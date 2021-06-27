@@ -18,6 +18,8 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
+  HStack,
+  Spacer,
 } from '@chakra-ui/react';
 import suite from '../validate';
 
@@ -25,7 +27,7 @@ function Home() {
   const [formState, setFormState] = useState({});
 
   const result = suite.get();
-  const runValidate = (name, value) => {
+  function runValidate(name, value) {
     suite(
       {
         ...formState,
@@ -33,18 +35,17 @@ function Home() {
       },
       name
     );
-  };
+  }
 
   function handleChange(name, value) {
     setFormState({ ...formState, [name]: value });
     runValidate(name, value);
   }
-  console.log(result);
 
   return (
     <Flex
       bg="gray.200"
-      height="100vh"
+      minHeight="100vh"
       justifyContent="center"
       alignItems="center"
       flexDirection="column"
@@ -55,9 +56,15 @@ function Home() {
             name="address"
             id="address"
             isRequired
-            isInvalid={result.getErrors('address')}
+            isInvalid={result.getErrors('address').length}
           >
-            <FormLabel htmlFor="address">Address</FormLabel>
+            <Flex>
+              <FormLabel htmlFor="address">Address</FormLabel>
+              <Spacer />
+              <FormErrorMessage mt={0} mb={2}>
+                {result.getErrors('address')[0]}
+              </FormErrorMessage>
+            </Flex>
             <Input
               name="address"
               placeholder="address"
@@ -65,7 +72,6 @@ function Home() {
               onChange={e => handleChange(e.target.name, e.target.value)}
               value={formState.address}
             />
-            <FormErrorMessage>Oi it's required</FormErrorMessage>
           </FormControl>
           <FormControl id="time" isRequired>
             <FormLabel htmlFor="time">Time</FormLabel>

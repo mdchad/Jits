@@ -4,10 +4,10 @@ export default vest.create((data = {}, currentField) => {
   vest.only(currentField);
 
   test('address', 'Address is required', () => {
-    enforce(data.username).isNotEmpty();
+    enforce(data.address).isNotEmpty();
   });
 
   test('address', 'Address is too short', () => {
-    enforce(data.username).longerThanOrEquals(3);
+    enforce(data.address).longerThanOrEquals(3);
   });
 });
