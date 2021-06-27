@@ -15,16 +15,18 @@ import {
   NumberInputField,
   NumberInputStepper,
   NumberIncrementStepper,
-  NumberDecrementStepper
+  NumberDecrementStepper,
 } from '@chakra-ui/react';
 
 function Home() {
   return (
-    <Flex bg="gray.200"
-          height="100vh"
-          justifyContent="center"
-          alignItems="center"
-          flexDirection="column">
+    <Flex
+      bg="gray.200"
+      height="100vh"
+      justifyContent="center"
+      alignItems="center"
+      flexDirection="column"
+    >
       <Box borderRadius="5" bg="white" p={5} width="500px">
         <VStack spacing={3}>
           <FormControl id="address" isRequired>
@@ -43,7 +45,8 @@ function Home() {
                 <NumberIncrementStepper />
                 <NumberDecrementStepper />
               </NumberInputStepper>
-            </NumberInput>          </FormControl>
+            </NumberInput>{' '}
+          </FormControl>
           <FormControl id="remarks" isRequired>
             <FormLabel htmlFor="remarks">Remarks</FormLabel>
             <Textarea placeholder="Remarks for the delivery" />
@@ -58,7 +61,7 @@ function Home() {
             <Input placeholder="job" size="md" />
           </FormControl>
           <Button colorScheme="teal" size="md">
-            Button
+            Save
           </Button>
           {/*<FormControl id="job" isRequired>*/}
           {/*  <FormLabel htmlFor="job">Job Name</FormLabel>*/}
