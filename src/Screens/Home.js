@@ -22,9 +22,21 @@ import {
   Spacer,
 } from '@chakra-ui/react';
 import suite from '../validate';
+import Autocomplete, { usePlacesWidget } from 'react-google-autocomplete';
 
 function Home() {
   const [formState, setFormState] = useState({});
+  const { ref } = usePlacesWidget({
+    apiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    onPlaceSelected: place => {
+      handleChange('address', place.formatted_address);
+    },
+    options: {
+      types: ['address'],
+      fields: ['formatted_address', 'geometry', 'name'],
+      componentRestrictions: { country: 'sg' },
+    },
+  });
 
   const result = suite.get();
   function runValidate(name, value) {
@@ -41,6 +53,7 @@ function Home() {
     setFormState({ ...formState, [name]: value });
     runValidate(name, value);
   }
+  console.log(formState);
 
   return (
     <Flex
@@ -65,17 +78,11 @@ function Home() {
                 {result.getErrors('address')[0]}
               </FormErrorMessage>
             </Flex>
-            <Input
-              name="address"
-              placeholder="address"
-              size="md"
-              onChange={e => handleChange(e.target.name, e.target.value)}
-              value={formState.address}
-            />
+            <Input placeholder="e.g 1 Raffles Quay" size="md" ref={ref} />
           </FormControl>
           <FormControl id="time" isRequired>
             <FormLabel htmlFor="time">Time</FormLabel>
-            <Input placeholder="time" size="md" />
+            <Input placeholder="Time" size="md" />
           </FormControl>
           <FormControl id="weight" isRequired>
             <FormLabel htmlFor="weight">Weight</FormLabel>
@@ -91,9 +98,9 @@ function Home() {
             <FormLabel htmlFor="remarks">Remarks</FormLabel>
             <Textarea placeholder="Remarks for the delivery" />
           </FormControl>
-          <Text fontSize="2xl">Recipient Details</Text>
-          <FormControl id="job" isRequired>
-            <FormLabel htmlFor="job">Name</FormLabel>
+          <Text fontSize="1xl">Recipient Details</Text>
+          <FormControl id="contactName" isRequired>
+            <FormLabel htmlFor="contactName">Name</FormLabel>
             <Input placeholder="Name" size="md" />
           </FormControl>
           <FormControl id="job" isRequired>

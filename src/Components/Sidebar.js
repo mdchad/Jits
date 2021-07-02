@@ -1,8 +1,7 @@
 import React from 'react';
-import { Link as RouterLink, useLocation } from "react-router-dom"
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 import {
   Box,
-  Button,
   Drawer,
   DrawerOverlay,
   DrawerCloseButton,
@@ -10,47 +9,46 @@ import {
   DrawerBody,
   DrawerContent,
   VStack,
-  Link
-} from '@chakra-ui/react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+  Link,
+} from '@chakra-ui/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog, faHome, faTasks } from '@fortawesome/free-solid-svg-icons';
 
 const SidebarContent = ({ onClick }) => {
-  const { pathname } = useLocation()
+  const { pathname } = useLocation();
   return (
     <VStack spacing={6} alignItems="flex-start">
       <Link
         as={RouterLink}
         to="/home"
-        _hover={{ textDecoration: "none" }}
+        _hover={{ textDecoration: 'none' }}
         color={pathname !== '/home' && 'gray.400'}
         mt={8}
         fontWeight={600}
       >
-        <FontAwesomeIcon icon={faHome}/> Home
+        <FontAwesomeIcon icon={faHome} /> Home
       </Link>
       <Link
         as={RouterLink}
         to="/jobs"
-        _hover={{ textDecoration: "none" }}
+        _hover={{ textDecoration: 'none' }}
         color={pathname !== '/jobs' && 'gray.400'}
         fontWeight={600}
       >
-        <FontAwesomeIcon icon={faTasks}/> Jobs
+        <FontAwesomeIcon icon={faTasks} /> Jobs
       </Link>
       <Link
         as={RouterLink}
         to="/settings"
-        _hover={{ textDecoration: "none" }}
+        _hover={{ textDecoration: 'none' }}
         color={pathname !== '/settings' && 'gray.400'}
         fontWeight={600}
       >
-        <FontAwesomeIcon icon={faCog}/> Settings
+        <FontAwesomeIcon icon={faCog} /> Settings
       </Link>
     </VStack>
-  )
-}
-
+  );
+};
 
 const Sidebar = ({ isOpen, variant, onClose }) => {
   return variant === 'sidebar' ? (
@@ -79,7 +77,7 @@ const Sidebar = ({ isOpen, variant, onClose }) => {
         </DrawerContent>
       </DrawerOverlay>
     </Drawer>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;
