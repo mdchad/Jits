@@ -10,4 +10,8 @@ export default vest.create((data = {}, currentField) => {
   test('address', 'Address is too short', () => {
     enforce(data.address).longerThanOrEquals(3);
   });
+
+  // test('email', 'Email is required', () => {
+  //   enforce(data.email).isNotEmpty();
+  // })
 });

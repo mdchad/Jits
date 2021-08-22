@@ -5,13 +5,16 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorker from './serviceWorker';
 import theme from './theme';
+import { UserContextProvider } from './utils/useUser';
 
 ReactDOM.render(
   <StrictMode>
     <ColorModeScript />
-    <ChakraProvider theme={theme}>
-      <App />
-    </ChakraProvider>
+    <UserContextProvider>
+      <ChakraProvider theme={theme}>
+        <App />
+      </ChakraProvider>
+    </UserContextProvider>
   </StrictMode>,
   document.getElementById('root')
 );

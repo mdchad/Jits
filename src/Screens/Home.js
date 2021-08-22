@@ -10,7 +10,6 @@ import {
   Textarea,
   Button,
   FormErrorMessage,
-  FormHelperText,
   InputGroup,
   InputLeftAddon,
   NumberInput,
@@ -18,7 +17,6 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
-  HStack,
   Spacer,
 } from '@chakra-ui/react';
 import suite from '../validate';
@@ -53,7 +51,6 @@ function Home() {
     setFormState({ ...formState, [name]: value });
     runValidate(name, value);
   }
-  console.log(formState);
 
   return (
     <Flex
@@ -78,7 +75,13 @@ function Home() {
                 {result.getErrors('address')[0]}
               </FormErrorMessage>
             </Flex>
-            <Input placeholder="e.g 1 Raffles Quay" size="md" ref={ref} />
+            <Input
+              placeholder="e.g 1 Raffles Quay"
+              size="md"
+              name="address"
+              ref={ref}
+              onChange={e => handleChange(e.target.name, e.target.value)}
+            />
           </FormControl>
           <FormControl id="time" isRequired>
             <FormLabel htmlFor="time">Time</FormLabel>

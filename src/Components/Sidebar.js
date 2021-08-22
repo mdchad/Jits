@@ -1,83 +1,87 @@
 import React from 'react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Box,
-  Drawer,
-  DrawerOverlay,
-  DrawerCloseButton,
-  DrawerHeader,
-  DrawerBody,
-  DrawerContent,
-  VStack,
   Link,
+  useColorModeValue,
+  Flex,
+  Text,
+  CloseButton,
+  Icon,
 } from '@chakra-ui/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog, faHome, faTasks } from '@fortawesome/free-solid-svg-icons';
+import {
+  FiCompass,
+  FiHome,
+  FiSettings,
+  FiStar,
+  FiTrendingUp,
+} from 'react-icons/fi';
 
-const SidebarContent = ({ onClick }) => {
-  const { pathname } = useLocation();
+const LinkItems = [
+  { name: 'Home', icon: FiHome, path: '/home' },
+  { name: 'Trending', icon: FiTrendingUp, path: '/home' },
+  { name: 'Explore', icon: FiCompass, path: '/home' },
+  { name: 'Favourites', icon: FiStar, path: '/home' },
+  { name: 'Settings', icon: FiSettings, path: '/settings' },
+];
+
+const SidebarContent = ({ onClose, ...rest }) => {
   return (
-    <VStack spacing={6} alignItems="flex-start">
-      <Link
-        as={RouterLink}
-        to="/home"
-        _hover={{ textDecoration: 'none' }}
-        color={pathname !== '/home' && 'gray.400'}
-        mt={8}
-        fontWeight={600}
-      >
-        <FontAwesomeIcon icon={faHome} /> Home
-      </Link>
-      <Link
-        as={RouterLink}
-        to="/jobs"
-        _hover={{ textDecoration: 'none' }}
-        color={pathname !== '/jobs' && 'gray.400'}
-        fontWeight={600}
-      >
-        <FontAwesomeIcon icon={faTasks} /> Jobs
-      </Link>
-      <Link
-        as={RouterLink}
-        to="/settings"
-        _hover={{ textDecoration: 'none' }}
-        color={pathname !== '/settings' && 'gray.400'}
-        fontWeight={600}
-      >
-        <FontAwesomeIcon icon={faCog} /> Settings
-      </Link>
-    </VStack>
-  );
-};
-
-const Sidebar = ({ isOpen, variant, onClose }) => {
-  return variant === 'sidebar' ? (
     <Box
-      position="fixed"
-      left={0}
-      pt={12}
-      px={8}
-      w="200px"
-      top={0}
-      h="100%"
-      bg="#020202"
-      color="#FFF"
+      transition="3s ease"
+      bg={useColorModeValue('white', 'gray.900')}
+      borderRight="1px"
+      borderRightColor={useColorModeValue('gray.200', 'gray.700')}
+      w={{ base: 'full', md: 60 }}
+      pos="fixed"
+      h="full"
+      {...rest}
     >
-      <SidebarContent onClick={onClose} />
+      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
+        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
+          Logo
+        </Text>
+        <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
+      </Flex>
+      {LinkItems.map(link => (
+        <NavItem key={link.name} icon={link.icon} path={link.path}>
+          {link.name}
+        </NavItem>
+      ))}
     </Box>
-  ) : (
-    <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
-      <DrawerOverlay>
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>Chakra-UI</DrawerHeader>
-          <DrawerBody>
-            <SidebarContent onClick={onClose} />
-          </DrawerBody>
-        </DrawerContent>
-      </DrawerOverlay>
-    </Drawer>
   );
 };
 
-export default Sidebar;
+const NavItem = ({ icon, path, children, ...rest }) => {
+  return (
+    <Link as={RouterLink} to={path} style={{ textDecoration: 'none' }}>
+      <Flex
+        align="center"
+        p="4"
+        mx="4"
+        borderRadius="lg"
+        role="group"
+        cursor="pointer"
+        _hover={{
+          bg: 'cyan.400',
+          color: 'white',
+        }}
+        {...rest}
+      >
+        {icon && (
+          <Icon
+            mr="4"
+            fontSize="16"
+            _groupHover={{
+              color: 'white',
+            }}
+            as={icon}
+          />
+        )}
+        {children}
+      </Flex>
+    </Link>
+  );
+};
+
+export default SidebarContent;

@@ -1,87 +1,125 @@
-// import React from 'react';
-// import {
-//   ChakraProvider,
-//   Box,
-//   HStack,
-//   Grid,
-//   theme,
-// } from '@chakra-ui/react';
-// import { ColorModeSwitcher } from './ColorModeSwitcher';
-// import Sidebar from './Components/Sidebar';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
 import Home from './Screens/Home';
 import Settings from './Screens/Settings';
-//
-// function App() {
-//   return (
-//     <Router>
-//       <ChakraProvider theme={theme}>
-//         <Box textAlign="center" fontSize="xl">
-//           <Grid minH="100vh">
-//             {/*<ColorModeSwitcher justifySelf="flex-end" />*/}
-//             <HStack spacing={8} h={'100%'}>
-//               <Sidebar />
-//               <Switch>
-//                 <Route path="/home">
-//                   <Home />
-//                 </Route>
-//                 <Route path="/settings">
-//                   <Settings />
-//                 </Route>
-//               </Switch>
-//             </HStack>
-//           </Grid>
-//         </Box>
-//       </ChakraProvider>
-//     </Router>
-//   );
-// }
-//
-// export default App;
+import { useEffect, useState } from 'react';
+import { Box } from '@chakra-ui/react';
 
+import Login from './Screens/Login';
+import { useUser } from './utils/useUser';
 
-import { useState } from 'react'
-import { Box, useBreakpointValue } from '@chakra-ui/react'
+import React from 'react';
+import {
+  useColorModeValue,
+  Drawer,
+  DrawerContent,
+  useDisclosure,
+} from '@chakra-ui/react';
+import SidebarContent from './Components/Sidebar';
+import MobileNav from './Components/Header';
 
-import Header from './Components/Header'
-import Sidebar from './Components/Sidebar'
-
-const smVariant = { navigation: 'drawer', navigationButton: true }
-const mdVariant = { navigation: 'sidebar', navigationButton: false }
+const routes = [
+  {
+    path: '/home',
+    component: <Home />,
+  },
+  {
+    path: '/settings',
+    component: <Settings />,
+  },
+  {
+    path: '/jobs',
+    component: <Home />,
+  },
+];
 
 export default function App() {
-  const [isSidebarOpen, setSidebarOpen] = useState(false)
-  const variants = useBreakpointValue({ base: smVariant, md: mdVariant })
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const { user } = useUser();
 
-  const toggleSidebar = () => setSidebarOpen(!isSidebarOpen)
+  useEffect(() => {
+    let token = localStorage.getItem('refresh_token');
+    if (token) {
+      setLoggedIn(true);
+      setLoading(false);
+      if (window.location.pathname === '/') {
+        window.location = '/home';
+      }
+    } else {
+      setLoggedIn(false);
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      setLoggedIn(true);
+    }
+  }, [user]);
+
+  function PrivateRoute({ children, ...rest }) {
+    return (
+      <Route
+        {...rest}
+        render={({ location }) => {
+          return loggedIn ? (
+            children
+          ) : (
+            <Redirect
+              to={{
+                pathname: '/login',
+                state: { from: location },
+              }}
+            />
+          );
+        }}
+      />
+    );
+  }
 
   return (
     <>
       <Router>
-        <Sidebar
-            variant={variants?.navigation}
-            isOpen={isSidebarOpen}
-            onClose={toggleSidebar}
-          />
-          <Box ml={!variants?.navigationButton && 200}>
-            <Header
-              showSidebarButton={variants?.navigationButton}
-              onShowSidebar={toggleSidebar}
-            />
-              <Switch>
-                <Route path="/home">
-                  <Home />
-                </Route>
-                <Route path="/settings">
-                  <Settings />
-                </Route>
-              </Switch>
-          </Box>
+        <Route path="/login">
+          <Login />
+        </Route>
+        {!loading &&
+          routes.map((route, i) => {
+            return (
+              <PrivateRoute path={route.path} key={i}>
+                <SidebarWithHeader>{route.component}</SidebarWithHeader>
+              </PrivateRoute>
+            );
+          })}
       </Router>
     </>
-  )
+  );
+}
+
+function SidebarWithHeader({ children }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  return (
+    <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
+      <SidebarContent
+        onClose={() => onClose}
+        display={{ base: 'none', md: 'block' }}
+      />
+      <Drawer
+        autoFocus={false}
+        isOpen={isOpen}
+        placement="left"
+        onClose={onClose}
+        returnFocusOnClose={false}
+        onOverlayClick={onClose}
+        size="full"
+      >
+        <DrawerContent>
+          <SidebarContent onClose={onClose} />
+        </DrawerContent>
+      </Drawer>
+      {/* mobilenav */}
+      <MobileNav onOpen={onOpen} />
+      <Box ml={{ base: 0, md: 60 }}>{children}</Box>
+    </Box>
+  );
 }
