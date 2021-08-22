@@ -18,7 +18,7 @@ import React from 'react';
 import { useUser } from '../utils/useUser';
 import { useHistory } from 'react-router-dom';
 
-const MobileNav = ({ onOpen, ...rest }) => {
+const MobileNav = ({ onOpen, user, ...rest }) => {
   const bg = useColorModeValue('white', 'gray.900');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
   const { signOut } = useUser();
@@ -96,7 +96,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
                       spacing="1px"
                       ml="2"
                     >
-                      <Text fontSize="sm">Justina Clark</Text>
+                      <Text fontSize="sm">{user?.name || 'Justina Clark'}</Text>
                       <Text fontSize="xs" color="gray.600">
                         Admin
                       </Text>

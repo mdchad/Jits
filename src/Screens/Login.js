@@ -21,7 +21,7 @@ import { useUser } from '../utils/useUser';
 export default function Login() {
   const background = useColorModeValue('white', 'gray.700');
   const background2 = useColorModeValue('gray.50', 'gray.800');
-  const { signIn } = useUser();
+  const { signIn, setUser } = useUser();
   const [redirectToReferrer, setRedirectToReferrer] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -38,6 +38,7 @@ export default function Login() {
       if (error) {
         throw error;
       }
+      setUser(data.user);
       window.localStorage.setItem('refresh_token', data.tokens.refresh.token);
       history.push(state?.from || '/home');
     } catch (e) {

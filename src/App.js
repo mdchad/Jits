@@ -87,7 +87,9 @@ export default function App() {
           routes.map((route, i) => {
             return (
               <PrivateRoute path={route.path} key={i}>
-                <SidebarWithHeader>{route.component}</SidebarWithHeader>
+                <SidebarWithHeader user={user}>
+                  {route.component}
+                </SidebarWithHeader>
               </PrivateRoute>
             );
           })}
@@ -96,7 +98,7 @@ export default function App() {
   );
 }
 
-function SidebarWithHeader({ children }) {
+function SidebarWithHeader({ children, user }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
@@ -118,7 +120,7 @@ function SidebarWithHeader({ children }) {
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
-      <MobileNav onOpen={onOpen} />
+      <MobileNav onOpen={onOpen} user={user} />
       <Box ml={{ base: 0, md: 60 }}>{children}</Box>
     </Box>
   );
