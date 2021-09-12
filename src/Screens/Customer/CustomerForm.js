@@ -19,10 +19,10 @@ import {
   NumberDecrementStepper,
   Spacer,
 } from '@chakra-ui/react';
-import suite from '../validate';
+import suite from '../../validate';
 import Autocomplete, { usePlacesWidget } from 'react-google-autocomplete';
 
-function Home() {
+function JobScreen() {
   const [formState, setFormState] = useState({});
   const { ref } = usePlacesWidget({
     apiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -138,4 +138,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default JobScreen;

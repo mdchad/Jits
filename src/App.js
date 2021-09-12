@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
-import Home from './Screens/Home';
 import Settings from './Screens/Settings';
 import { useEffect, useState } from 'react';
 import { Box } from '@chakra-ui/react';
@@ -16,19 +15,26 @@ import {
 } from '@chakra-ui/react';
 import SidebarContent from './Components/Sidebar';
 import MobileNav from './Components/Header';
+import Dashboard from './Screens/Dashboard';
+import Job from './Screens/Job/Job';
+import Customer from './Screens/Customer/Customer';
 
 const routes = [
   {
     path: '/home',
-    component: <Home />,
+    component: <Dashboard />,
   },
   {
     path: '/settings',
     component: <Settings />,
   },
   {
+    path: '/customers',
+    component: <Customer />,
+  },
+  {
     path: '/jobs',
-    component: <Home />,
+    component: <Job />,
   },
 ];
 

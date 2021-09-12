@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 import {
   Box,
   Link,
@@ -10,18 +10,17 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import {
-  FiCompass,
+  FiList,
   FiHome,
   FiSettings,
-  FiStar,
+  FiUsers,
   FiTrendingUp,
 } from 'react-icons/fi';
 
 const LinkItems = [
-  { name: 'Home', icon: FiHome, path: '/home' },
-  { name: 'Trending', icon: FiTrendingUp, path: '/home' },
-  { name: 'Explore', icon: FiCompass, path: '/home' },
-  { name: 'Favourites', icon: FiStar, path: '/home' },
+  { name: 'Dashboard', icon: FiHome, path: '/home' },
+  { name: 'Jobs', icon: FiList, path: '/jobs' },
+  { name: 'Customers', icon: FiUsers, path: '/customers' },
   { name: 'Settings', icon: FiSettings, path: '/settings' },
 ];
 
@@ -29,7 +28,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
   return (
     <Box
       transition="3s ease"
-      bg={useColorModeValue('white', 'gray.900')}
+      bg={useColorModeValue('gray.900', 'gray.900')}
       borderRight="1px"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full', md: 60 }}
@@ -38,7 +37,12 @@ const SidebarContent = ({ onClose, ...rest }) => {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
+        <Text
+          fontSize="2xl"
+          fontFamily="monospace"
+          fontWeight="bold"
+          color={'white'}
+        >
           Logo
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
@@ -53,6 +57,13 @@ const SidebarContent = ({ onClose, ...rest }) => {
 };
 
 const NavItem = ({ icon, path, children, ...rest }) => {
+  const { pathname } = useLocation();
+
+  let isActive = false;
+  if (pathname.includes(path)) {
+    isActive = true;
+  }
+
   return (
     <Link as={RouterLink} to={path} style={{ textDecoration: 'none' }}>
       <Flex
@@ -63,9 +74,10 @@ const NavItem = ({ icon, path, children, ...rest }) => {
         role="group"
         cursor="pointer"
         _hover={{
-          bg: 'cyan.400',
-          color: 'white',
+          color: path !== pathname && 'cyan.400',
         }}
+        bg={isActive && 'cyan.400'}
+        color={'white'}
         {...rest}
       >
         {icon && (
@@ -73,7 +85,7 @@ const NavItem = ({ icon, path, children, ...rest }) => {
             mr="4"
             fontSize="16"
             _groupHover={{
-              color: 'white',
+              color: path !== pathname && 'cyan.400',
             }}
             as={icon}
           />
